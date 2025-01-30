@@ -1,0 +1,1 @@
+SELECT * FROM "Insumos" i WHERE i.id IN (SELECT ip.insumo FROM "InsumosProducto" ip WHERE ip.producto = $1) ;

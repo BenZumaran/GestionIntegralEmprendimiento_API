@@ -1,0 +1,1 @@
+SELECT * FROM "Tipos" t WHERE t.id IN (SELECT ct.tipo FROM "CategoriaTipos" ct WHERE ct.categoria = $1) ;

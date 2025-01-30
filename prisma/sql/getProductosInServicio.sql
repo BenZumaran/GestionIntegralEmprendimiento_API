@@ -1,0 +1,1 @@
+SELECT * FROM "Productos" p WHERE p.id IN (SELECT ps.producto FROM "ProductosServicio" ps WHERE ps.servicio = $1) ;

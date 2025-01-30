@@ -1,0 +1,213 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["typedSql"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_URL")
+}
+
+model Tipos {
+  id               Int              @id @default(autoincrement()) @db.Integer
+  nombre           String           @db.VarChar(25)
+  createdAt        DateTime         @default(now()) @db.Date
+  Productos        Productos[]
+  Servicios        Servicios[]
+  Insumo           Insumos[]        @relation("tipoInsumo")
+  InsumoAlmacen    Insumos[]        @relation("tipoAlmacen")
+  Proveedores      Proveedores[]
+  Pedidos          Pedidos[]
+  Usuario          Usuarios[]       @relation("tipoDocumento")
+  UsuarioDocumento Usuarios[]       @relation("tipoUsuario")
+  Almacen          Almacen[]
+  CategoriaTipos   CategoriaTipos[]
+}
+
+model Categorias {
+  id             Int              @id @default(autoincrement()) @db.Integer
+  createdAt      DateTime         @default(now()) @db.Date
+  nombre         String           @db.VarChar(25)
+  CategoriaTipos CategoriaTipos[]
+}
+
+model CategoriaTipos {
+  Categoria Categorias @relation(fields: [categoria], references: [id])
+  categoria Int        @db.Integer
+  Tipo      Tipos      @relation(fields: [tipo], references: [id])
+  tipo      Int        @db.Integer
+
+  @@id([categoria, tipo])
+}
+
+model Proveedores {
+  ruc             String      @id @db.VarChar(11)
+  razonSocial     String      @db.VarChar(255)
+  telefono        String?     @db.VarChar(11)
+  direccion       String?     @db.VarChar(255)
+  createdAt       DateTime    @default(now()) @db.Date
+  Tipo            Tipos       @relation(fields: [tipo], references: [id])
+  tipo            Int         @db.Integer
+  cuentaCorriente String?     @db.VarChar(25)
+  Productos       Productos[]
+  Insumo          Insumos[]
+}
+
+model Insumos {
+  id              Int               @id @default(autoincrement()) @db.Integer
+  nombre          String            @db.VarChar(25)
+  descripcion     String            @db.VarChar(255)
+  precio          Decimal           @db.Decimal()
+  TipoInsumo      Tipos             @relation("tipoInsumo", fields: [tipoInsumo], references: [id])
+  tipoInsumo      Int               @db.Integer
+  unidadMedida    String            @db.VarChar(25)
+  Proveedor       Proveedores?      @relation(fields: [rucProveedor], references: [ruc])
+  rucProveedor    String?           @db.VarChar(11)
+  duracion        Int               @db.Integer
+  TipoAlmacen     Tipos?            @relation("tipoAlmacen", fields: [tipoAlmacen], references: [id])
+  tipoAlmacen     Int?              @db.Integer
+  createdAt       DateTime          @default(now()) @db.Date
+  InsumosProducto InsumosProducto[]
+  AlmacenInsumos  AlmacenInsumos[]
+}
+
+model Productos {
+  id                 String              @id @default(cuid())
+  nombre             String              @unique @db.VarChar(25)
+  descripcion        String              @db.VarChar(255)
+  createdAt          DateTime            @default(now()) @db.Date
+  precio             Int                 @db.Integer
+  Tipo               Tipos               @relation(fields: [tipo], references: [id])
+  tipo               Int                 @db.Integer
+  estado             Boolean             @default(true)
+  Proveedor          Proveedores?        @relation(fields: [rucProveedor], references: [ruc])
+  rucProveedor       String?             @db.VarChar(11)
+  unidadMedida       String              @db.VarChar(25)
+  ProductosServicios ProductosServicio[]
+  PedidoProductos    PedidoProductos[]
+  AlmacenProductos   AlmacenProductos[]
+  InsumosProducto    InsumosProducto[]
+}
+
+model Servicios {
+  id                 String              @id @default(cuid())
+  nombre             String              @unique @db.VarChar(25)
+  descripcion        String              @db.VarChar(255)
+  createdAt          DateTime            @default(now()) @db.Date
+  precio             Int                 @db.Integer
+  Tipo               Tipos               @relation(fields: [tipo], references: [id])
+  tipo               Int                 @db.Integer
+  estado             Boolean             @default(true)
+  ProductosServicios ProductosServicio[]
+  PedidoServicios    PedidoServicios[]
+}
+
+model ProductosServicio {
+  Servicio Servicios @relation(fields: [servicio], references: [id])
+  Producto Productos @relation(fields: [producto], references: [id])
+  servicio String    @db.VarChar()
+  producto String    @db.VarChar()
+  cantidad Int       @db.Integer
+  tiempo   Decimal   @db.Decimal()
+
+  @@id([servicio, producto])
+}
+
+model InsumosProducto {
+  Insumo   Insumos   @relation(fields: [insumo], references: [id])
+  Producto Productos @relation(fields: [producto], references: [id])
+  insumo   Int       @db.Integer
+  producto String    @db.VarChar()
+  cantidad Int       @db.Integer
+
+  @@id([insumo, producto])
+}
+
+model Pedidos {
+  id              String            @id @default(cuid())
+  createdAt       DateTime          @default(now()) @db.Timestamp()
+  fechaCambio     DateTime          @db.Timestamp()
+  Usuario         Usuarios          @relation(fields: [usuario], references: [id])
+  usuario         String            @db.VarChar()
+  Tipo            Tipos             @relation(fields: [estado], references: [id])
+  estado          Int               @db.Integer
+  Total           Decimal           @db.Money()
+  PedidoProductos PedidoProductos[]
+  PedidoServicios PedidoServicios[]
+}
+
+model PedidoProductos {
+  Pedido   Pedidos   @relation(fields: [pedido], references: [id])
+  Producto Productos @relation(fields: [producto], references: [id])
+  pedido   String    @db.VarChar()
+  producto String    @db.VarChar()
+  cantidad Int       @db.Integer
+
+  @@id([pedido, producto])
+}
+
+model PedidoServicios {
+  Pedido   Pedidos   @relation(fields: [pedido], references: [id])
+  Servicio Servicios @relation(fields: [servicio], references: [id])
+  pedido   String    @db.VarChar()
+  servicio String    @db.VarChar()
+  cantidad Int       @db.Integer
+
+  @@id([pedido, servicio])
+}
+
+model Usuarios {
+  id              String    @id @default(uuid())
+  correo          String    @unique
+  nombre          String    @db.VarChar(150)
+  nombreUsuario   String?   @db.VarChar(150)
+  telefono        String?   @db.VarChar(11)
+  direccion       String?   @db.VarChar(255)
+  fechaNacimiento DateTime? @db.Date
+  TipoDocumento   Tipos?    @relation("tipoDocumento", fields: [tipoDocumento], references: [id])
+  tipoDocumento   Int?      @db.Integer
+  numeroDocumento String?   @db.VarChar(11)
+  TipoUsuario     Tipos     @relation("tipoUsuario", fields: [tipoUsuario], references: [id])
+  tipoUsuario     Int       @db.Integer
+  clave           String    @db.VarChar(150)
+  createdAt       DateTime  @default(now()) @db.Date
+  Pedidos         Pedidos[]
+}
+
+model Almacen {
+  id               String             @id @default(cuid())
+  nombre           String             @unique @db.VarChar(25)
+  capacidad        Decimal            @db.Decimal()
+  dimensiones      Decimal            @db.Decimal()
+  Tipo             Tipos              @relation(fields: [tipo], references: [id])
+  tipo             Int                @db.Integer
+  ubicacion        String             @db.VarChar(255)
+  AlmacenProductos AlmacenProductos[]
+  AlmacenInsumos   AlmacenInsumos[]
+}
+
+model AlmacenProductos {
+  Almacen  Almacen   @relation(fields: [almacen], references: [id])
+  Producto Productos @relation(fields: [producto], references: [id])
+  almacen  String    @db.VarChar()
+  producto String    @db.VarChar()
+  cantidad Int       @db.Integer
+
+  @@id([almacen, producto])
+}
+
+model AlmacenInsumos {
+  Almacen  Almacen @relation(fields: [almacen], references: [id])
+  Insumo   Insumos @relation(fields: [insumo], references: [id])
+  almacen  String  @db.VarChar()
+  insumo   Int     @db.Integer
+  cantidad Int     @db.Integer
+
+  @@id([almacen, insumo])
+}
