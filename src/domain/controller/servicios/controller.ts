@@ -13,7 +13,11 @@ export class ServiciosController {
   // constructor(){}
 
   public getServicios = async (req: Request, res: Response): Promise<any> => {
-    const servicios = await prisma.servicios.findMany();
+    const servicios = await prisma.servicios.findMany({
+      orderBy: {
+          createdAt: 'asc'
+      }
+  });
     return res.json(servicios);
   };
 

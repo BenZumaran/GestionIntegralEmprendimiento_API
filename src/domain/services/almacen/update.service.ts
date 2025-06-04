@@ -1,6 +1,5 @@
 export class UpdateAlmacen {
     constructor(
-        public readonly id:string,
         public readonly nombre:string,
         public readonly capacidad:number,
         public readonly dimensiones:number,
@@ -25,6 +24,6 @@ export class UpdateAlmacen {
         const { id, nombre, capacidad, dimensiones, tipo, ubicacion } = props;
         if (!id) return ['id is required', undefined];
 
-        return [undefined, new UpdateAlmacen(id, nombre, capacidad, dimensiones, tipo, ubicacion)];
+        return [undefined, new UpdateAlmacen(nombre, capacidad, dimensiones, tipo, ubicacion)];
     }
 }

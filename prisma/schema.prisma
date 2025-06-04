@@ -130,16 +130,22 @@ model InsumosProducto {
 }
 
 model Pedidos {
-  id              String            @id @default(cuid())
-  createdAt       DateTime          @default(now()) @db.Timestamp()
-  fechaCambio     DateTime          @db.Timestamp()
-  Usuario         Usuarios          @relation(fields: [usuario], references: [id])
-  usuario         String            @db.VarChar()
-  Tipo            Tipos             @relation(fields: [estado], references: [id])
-  estado          Int               @db.Integer
-  Total           Decimal           @db.Money()
-  PedidoProductos PedidoProductos[]
-  PedidoServicios PedidoServicios[]
+  id               String            @id @default(cuid())
+  createdAt        DateTime          @default(now()) @db.Timestamp()
+  fechaCambio      DateTime          @default(now()) @db.Timestamp()
+  Usuario          Usuarios?         @relation(fields: [usuarioIngresa], references: [id])
+  usuarioIngresa   String?           @db.VarChar()
+  Tipo             Tipos             @relation(fields: [estado], references: [id])
+  estado           Int               @db.Integer
+  nombreUsuario    String            @db.VarChar()
+  correoUsuario    String            @db.VarChar()
+  telefonoUsuario  String            @db.VarChar()
+  documentoUsuario String            @db.VarChar()
+  direccionUsuario String            @db.VarChar()
+  fechaEntrega     DateTime?         @db.Timestamp()
+  Total            Decimal?          @db.Money()
+  PedidoProductos  PedidoProductos[]
+  PedidoServicios  PedidoServicios[]
 }
 
 model PedidoProductos {
@@ -166,7 +172,7 @@ model Usuarios {
   id              String    @id @default(uuid())
   correo          String    @unique
   nombre          String    @db.VarChar(150)
-  nombreUsuario   String?   @db.VarChar(150)
+  nombreUsuario   String?   @unique @db.VarChar(150)
   telefono        String?   @db.VarChar(11)
   direccion       String?   @db.VarChar(255)
   fechaNacimiento DateTime? @db.Date
@@ -193,21 +199,25 @@ model Almacen {
 }
 
 model AlmacenProductos {
-  Almacen  Almacen   @relation(fields: [almacen], references: [id])
-  Producto Productos @relation(fields: [producto], references: [id])
-  almacen  String    @db.VarChar()
-  producto String    @db.VarChar()
-  cantidad Int       @db.Integer
+  Almacen      Almacen   @relation(fields: [almacen], references: [id])
+  Producto     Productos @relation(fields: [producto], references: [id])
+  almacen      String    @db.VarChar()
+  producto     String    @db.VarChar()
+  cantidad     Int       @db.Integer
+  fechaIngreso DateTime  @default(now()) @db.Timestamp()
+  lote         String    @default(cuid())
 
   @@id([almacen, producto])
 }
 
 model AlmacenInsumos {
-  Almacen  Almacen @relation(fields: [almacen], references: [id])
-  Insumo   Insumos @relation(fields: [insumo], references: [id])
-  almacen  String  @db.VarChar()
-  insumo   Int     @db.Integer
-  cantidad Int     @db.Integer
+  Almacen      Almacen  @relation(fields: [almacen], references: [id])
+  Insumo       Insumos  @relation(fields: [insumo], references: [id])
+  almacen      String   @db.VarChar()
+  insumo       Int      @db.Integer
+  cantidad     Int      @db.Integer
+  fechaIngreso DateTime @default(now()) @db.Timestamp()
+  lote         String   @default(cuid())
 
   @@id([almacen, insumo])
 }

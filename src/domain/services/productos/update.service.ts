@@ -1,6 +1,5 @@
 export class UpdateProducto {
     constructor(
-        public readonly id :string,
         public readonly nombre :string,
         public readonly descripcion :string,
         public readonly precio :number,

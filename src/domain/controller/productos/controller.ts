@@ -5,6 +5,8 @@ import { UpdateProducto } from "../../services/productos/update.service";
 import { getProductosInServicio } from "@prisma/client/sql";
 import { InsertInsumoToProducto } from "../../services/productos/insertInsumoToProduct.service";
 import { UpdateInsumoToProducto } from "../../services/productos/updateInsumoToProduct.service";
+import { UpdateProductoToAlmacen } from "../../services/productos/updateProductToAlmacen.service";
+import { InsertProductoToAlmacen } from "../../services/productos/insertProductToAlmacen.service";
 
 const prisma = new PrismaClient();
 
@@ -13,7 +15,11 @@ export class ProductosController {
     // constructor(){}
 
     public getProductos = async (req:Request, res:Response):Promise<any> => {
-        const productos = await prisma.productos.findMany();
+        const productos = await prisma.productos.findMany({
+          orderBy: {
+              createdAt: 'asc'
+          }
+      });
         return res.json(productos);
     }
 
@@ -90,7 +96,7 @@ export class ProductosController {
         return res.json(insumos);
       };
 
-      public insertInsumoToServicio = async (
+      public insertInsumoToProducto = async (
           req: Request,
           res: Response
         ): Promise<any> => {
@@ -151,4 +157,44 @@ export class ProductosController {
         });
         res.json(insumoInProducto);
       };
+      /**
+       * almacen
+        producto
+        cantidad
+        fechaIngreso
+       */
+
+      public insertProductoToAlmacen = async (
+            req: Request,
+            res: Response): Promise<any> => {
+              const [error, insertProductoToAlmacen] = InsertProductoToAlmacen.create(
+                req.body
+              );
+              if (error) return res.status(400).json({ error });
+              const productoToAlmacen = await prisma.almacenProductos.create({
+                data: insertProductoToAlmacen!,
+              });
+              res.json(productoToAlmacen);
+      }
+
+      public updateProductoToAlmacen = async (
+        req: Request,
+        res: Response
+      ): Promise<any> => {
+        const [error, updateProductoToAlmacen] = UpdateProductoToAlmacen.create({
+          ...req.body
+        });
+        if (error) return res.status(400).json({ error });
+        const updatedProducto = await prisma.almacenProductos.updateMany({
+          where: {
+              producto: updateProductoToAlmacen!.producto,
+              almacen: updateProductoToAlmacen!.almacen,
+          },
+          data: {
+            cantidad: updateProductoToAlmacen!.cantidad,
+          }
+        });
+        if(!updatedProducto) return res.status(404).json({error: `producto with id ${updateProductoToAlmacen?.producto} not found`});
+        res.json(updatedProducto);
+      }
 }

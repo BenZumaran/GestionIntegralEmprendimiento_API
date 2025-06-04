@@ -8,9 +8,10 @@ export class UsuariosRoutes {
     const router = Router();
     const usuariosController = new UsuariosController();
     router.get('/', usuariosController.getUsuarios);
-    router.get('/:ruc', usuariosController.getUsuarioById);
+    router.get('/:id', usuariosController.getUsuarioById);
     router.post('/', usuariosController.createUsuario);
-    router.put('/:ruc', usuariosController.updateUsuario);
+    router.put('/:id', usuariosController.updateUsuario);
+    router.post('/sesion', usuariosController.inicioSesion);
     
     return router;
     }

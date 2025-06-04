@@ -15,6 +15,9 @@ export class InsumosRoutes {
 
     router.get('/producto/:id', insumosController.getInsumosInProducto);
 
+    router.post('/almacen', insumosController.insertInsumoToAlmacen);
+    router.put('/almacen', insumosController.updateInsumoToAlmacen);
+
     return router;
     }
 

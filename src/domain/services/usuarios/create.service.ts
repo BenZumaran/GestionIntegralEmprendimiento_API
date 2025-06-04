@@ -37,6 +37,6 @@ export class CreateUsuario {
         if (!tipoUsuario) return ['tipoUsuario is required', undefined];
         if (!clave) return ['clave is required', undefined];
 
-        return [undefined, new CreateUsuario(correo,nombre,tipoUsuario,clave,nombreUsuario,telefono,direccion,fechaNacimiento,tipoDocumento,numeroDocumento)];
+        return [undefined, new CreateUsuario(correo,nombre,tipoUsuario,clave,nombreUsuario,telefono,direccion,new Date(fechaNacimiento),tipoDocumento,numeroDocumento)];
     }
 }

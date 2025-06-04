@@ -25,6 +25,6 @@ export class UpdateProveedor {
         const { ruc, razonSocial, telefono, direccion, tipo, cuentaCorriente } = props;
         if (!ruc) return ['ruc is required', undefined];
 
-        return [undefined, new UpdateProveedor(ruc, razonSocial, telefono, direccion, tipo, cuentaCorriente)];
+        return [undefined, new UpdateProveedor(ruc, razonSocial, tipo, telefono, direccion, cuentaCorriente)];
     }
 }

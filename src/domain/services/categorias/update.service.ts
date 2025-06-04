@@ -3,14 +3,14 @@
 export class UpdateCategoria {
     constructor(
         public readonly id: number,
-        public readonly text?: string,
+        public readonly nombre?: string,
     ) {}
 
     get values(){
 
         const returnObj: {[key:string]:any} = {}
 
-        this.text && (returnObj.text = this.text);
+        this.nombre && (returnObj.nombre = this.nombre);
 
         return returnObj;
 

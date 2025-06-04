@@ -12,7 +12,12 @@ export class AlmacensRoutes {
     router.post('/', almacenController.createAlmacen);
     router.put('/:id', almacenController.updateAlmacen);
     
+    router.get('/producto/id/:id', almacenController.getProductosAlmacenId);
+    router.get('/insumo/id/:id', almacenController.getInsumosAlmacenId);
+
+    router.get('/producto/all', almacenController.getProductosAlmacen);    
+    router.get('/insumo/all', almacenController.getInsumosAlmacen);
+    
     return router;
     }
-
 }

@@ -11,7 +11,11 @@ export class ProveedoresController {
     //Cubrir deuda técnica con adaptadores
 
     public getProveedores = async (req:Request, res:Response):Promise<any> => {
-        const proveedores = await prisma.proveedores.findMany();
+        const proveedores = await prisma.proveedores.findMany({
+            orderBy: {
+                createdAt: 'asc'
+            }
+        });
         return res.json(proveedores);
     }
 
@@ -21,7 +25,7 @@ export class ProveedoresController {
         const proveedor = await prisma.proveedores.findFirst({
             where: { ruc }
         });
-
+ 
         (proveedor)
             ? res.json(proveedor)
             : res.status(404).json({error: `Proveedor with ruc ${ruc} not found`});
@@ -34,7 +38,7 @@ export class ProveedoresController {
         const proveedor = await prisma.proveedores.create({
             data: createProveedor!
         });
-            
+        
         res.json(proveedor);
     }
     

@@ -11,7 +11,11 @@ export class CategoriasController {
     // constructor(){}
 
     public getCategorias = async (req:Request, res:Response):Promise<any> => {
-        const categorias = await prisma.categorias.findMany();
+        const categorias = await prisma.categorias.findMany({
+            orderBy: {
+                id: 'asc'
+            }
+        });
         return res.json(categorias);
     }
 

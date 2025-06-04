@@ -10,7 +10,11 @@ export class UsuariosController {
     // constructor(){}
 
     public getUsuarios = async (req:Request, res:Response):Promise<any> => {
-        const usuarios = await prisma.usuarios.findMany();
+        const usuarios = await prisma.usuarios.findMany({
+            orderBy: {
+                createdAt: 'asc'
+            }
+        });
         return res.json(usuarios);
     }
 
@@ -61,4 +65,24 @@ export class UsuariosController {
         if(!usuario) return res.status(404).json({error: `usuario with id ${id} not found`});
         res.json(usuario);
     }
+
+    public inicioSesion = async (req:Request, res:Response):Promise<any> => {
+        const {usuario, clave} = req.body;
+        if(!usuario) return res.status(400).json({error: 'usuario is required'});
+        if(!clave) return res.status(400).json({error: 'clave is required'});
+        const validacion = await prisma.usuarios.findFirst({
+            where: { nombreUsuario: usuario },
+            select:{
+                id: true,
+                clave: true,
+            }
+        });
+
+        if(validacion)
+            if (clave === validacion.clave) 
+                res.json({user:validacion.id});
+            else res.json({error: 'clave incorrecta'});
+        else res.status(404).json({error: `usuario ${usuario} not found`});
+    }
+
 }

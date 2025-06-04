@@ -12,7 +12,11 @@ export class TiposController {
     //Cubrir deuda técnica con adaptadores
 
     public getTipos = async (req:Request, res:Response):Promise<any> => {
-        const tipos = await prisma.tipos.findMany();
+        const tipos = await prisma.tipos.findMany({
+            orderBy: {
+                id: 'asc'
+            }
+        });
         return res.json(tipos);
     }
 

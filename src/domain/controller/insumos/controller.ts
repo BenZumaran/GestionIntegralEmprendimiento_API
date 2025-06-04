@@ -3,6 +3,8 @@ import { Request, Response } from "express";
 import { CreateInsumo } from "../../services/insumos/create.service";
 import { UpdateInsumo } from "../../services/insumos/update.service";
 import { getInsumosInProducto } from "@prisma/client/sql";
+import { InsertInsumoToAlmacen } from "../../services/insumos/insertInsumoToAlmacen.service";
+import { UpdateInsumoToAlmacen } from "../../services/insumos/updateInsumoToAlmacen.service";
 
 const prisma = new PrismaClient();
 
@@ -12,7 +14,11 @@ export class InsumosController {
     //Cubrir deuda técnica con adaptadores
 
     public getInsumos = async (req:Request, res:Response):Promise<any> => {
-        const Insumos = await prisma.insumos.findMany();
+        const Insumos = await prisma.insumos.findMany({
+            orderBy: {
+                createdAt: 'asc'
+            }
+        });
         return res.json(Insumos);
     }
 
@@ -69,5 +75,40 @@ export class InsumosController {
               error: `not found insumos in prodcuto with id ${id}`,
             });
       };
+
+      
+            public insertInsumoToAlmacen = async (
+                  req: Request,
+                  res: Response): Promise<any> => {
+                    const [error, insertInsumoToAlmacen] = InsertInsumoToAlmacen.create(
+                      req.body
+                    );
+                    if (error) return res.status(400).json({ error });
+                    const insumoToAlmacen = await prisma.almacenInsumos.create({
+                      data: insertInsumoToAlmacen!,
+                    });
+                    res.json(insumoToAlmacen);
+            }
+      
+            public updateInsumoToAlmacen = async (
+              req: Request,
+              res: Response
+            ): Promise<any> => {
+              const [error, updateInsumotoToAlmacen] = UpdateInsumoToAlmacen.create({
+                ...req.body
+              });
+              if (error) return res.status(400).json({ error });
+              const updatedProducto = await prisma.almacenInsumos.updateMany({
+                where: {
+                    insumo: updateInsumotoToAlmacen!.insumo,
+                    almacen: updateInsumotoToAlmacen!.almacen,
+                },
+                data: {
+                  cantidad: updateInsumotoToAlmacen!.cantidad,
+                }
+              });
+              if(!updatedProducto) return res.status(404).json({error: `insumo with id ${updateInsumotoToAlmacen?.insumo} not found`});
+              res.json(updatedProducto);
+            }
 
 }
