@@ -75,12 +75,13 @@ export class UsuariosController {
             select:{
                 id: true,
                 clave: true,
+                tipoUsuario: true,
             }
         });
 
         if(validacion)
             if (clave === validacion.clave) 
-                res.json({user:validacion.id});
+                res.json({usuario:validacion.id, tipo: validacion.tipoUsuario});
             else res.json({error: 'clave incorrecta'});
         else res.status(404).json({error: `usuario ${usuario} not found`});
     }

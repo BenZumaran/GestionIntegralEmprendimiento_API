@@ -22,6 +22,10 @@ export class ProductosController {
       });
         return res.json(productos);
     }
+    public getProductosInPedidos = async (req:Request, res:Response):Promise<any> => {
+        const productos = await prisma.pedidoProductos.findMany();
+        return res.json(productos);
+    }
 
     public getProductoById = async (req:Request, res:Response):Promise<any> => {
         const id = req.params.id;

@@ -18,6 +18,10 @@ export class CategoriasController {
         });
         return res.json(categorias);
     }
+    public getCategoriasTipo = async (req:Request, res:Response):Promise<any> => {
+        const categorias = await prisma.categoriaTipos.findMany();
+        return res.json(categorias);
+    }
 
     public getCategoriaById = async (req:Request, res:Response):Promise<any> => {
         const id = +req.params.id;

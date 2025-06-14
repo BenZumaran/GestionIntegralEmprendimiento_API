@@ -18,6 +18,8 @@ export class ServiciosRoutes {
     router.put('/producto/:servicio', serviciosController.updateProductoInServicio);
     router.delete('/producto/:servicio/:producto', serviciosController.deleteProductoFromServicio);
 
+        router.get('/pedidos/all', serviciosController.getServiciosInPedidos);
+
     return router;
     }
 

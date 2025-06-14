@@ -39,7 +39,7 @@ export class UpdatePedido {
         
         if(!id) return ['id es requerido'];
 
-        return [undefined, new UpdatePedido(new Date(fechaCambio),usuarioIngresa,estado,nombreUsuario,correoUsuario,telefonoUsuario,documentoUsuario,direccionUsuario
-            ,new Date(fechaEntrega),Total)];
+        return [undefined, new UpdatePedido(new Date(),usuarioIngresa,estado,nombreUsuario,correoUsuario,telefonoUsuario,documentoUsuario,direccionUsuario
+            ,fechaEntrega,Total)];
     }
 }

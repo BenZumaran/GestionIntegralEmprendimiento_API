@@ -3,6 +3,9 @@ import { Request, Response } from "express";
 import { CreatePedido } from "../../services/pedidos/create.service";
 import { CreatePedidoDetalle } from "../../services/pedidos/createPedidoDetalle.service";
 import { UpdatePedido } from "../../services/pedidos/update.service";
+import { FilterPedido } from "../../services/pedidos/filter.service";
+import { getPedidosByEstado } from "@prisma/client/sql"
+
 
 const prisma = new PrismaClient();
 
@@ -24,24 +27,22 @@ export class PedidosController {
         const id = req.params.id;
         if(!id) return res.status(400).json({error: 'Id is required'});
         const pedido = await prisma.pedidos.findFirst({
-            where: { id }
+            where: { id },
+            include: {
+                PedidoProductos: true,
+                PedidoServicios: true,
+            }
         });
-
-        const detalleProductos = await prisma.pedidoProductos.findMany({
-            where: { pedido:id }
-        });
-
-        const detalleServicios = await prisma.pedidoServicios.findMany({
-            where: { pedido:id }
-        });
-        const resObj:{[key:string]:any} = {}; 
-        resObj.pedido = pedido;
-        detalleProductos.length > 0 && (resObj.detalleProductos = detalleProductos);
-        detalleServicios.length > 0 && (resObj.detalleServicios = detalleServicios);
-        (pedido)
-            ? res.json(resObj)
+            (pedido) ? res.json(pedido)
             : res.status(404).json({error: `pedido with id ${id} not found`});
     }
+
+    public getPedidosByEstado = async (req:Request, res:Response):Promise<any> => {
+        const filtro= req.params.filtro;        
+        const pedidos = await prisma.$queryRawTyped(getPedidosByEstado(filtro))
+        res.json(pedidos);
+    }
+
     public getPedidoWithDetalleById = async (req:Request, res:Response):Promise<any> => {
         const id = req.params.id;
         if(!id) return res.status(400).json({error: 'Id is required'});

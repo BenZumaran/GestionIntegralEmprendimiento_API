@@ -22,7 +22,8 @@ export class ProductosRoutes {
     
     router.post('/almacen', productosController.insertProductoToAlmacen);
     router.put('/almacen', productosController.updateProductoToAlmacen);
-
+    
+    router.get('/pedidos/all', productosController.getProductosInPedidos);
 
     return router;
     }

@@ -20,6 +20,10 @@ export class ServiciosController {
   });
     return res.json(servicios);
   };
+  public getServiciosInPedidos = async (req: Request, res: Response): Promise<any> => {
+    const servicios = await prisma.pedidoServicios.findMany();
+    return res.json(servicios);
+  };
 
   public getServicioById = async (
     req: Request,

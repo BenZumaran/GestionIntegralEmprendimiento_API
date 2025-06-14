@@ -11,13 +11,14 @@ export class PedidosRoutes {
     router.get('/:id', pedidosController.getPedidoById);
     router.post('/', pedidosController.createPedido);
     router.put('/:id', pedidosController.updatePedido);
-     router.delete('/:id', pedidosController.deletePedido);
+    router.delete('/:id', pedidosController.deletePedido);
     
     router.get('/detalle/:id', pedidosController.getPedidoWithDetalleById);
     router.post('/detalle/:pedido', pedidosController.addDetalle);
     router.put('/detalle/', pedidosController.updateDetalle);
     router.delete('/detalle/:pedido', pedidosController.deleteDetalle);
     
+    router.get('/filtro/estado/:filtro', pedidosController.getPedidosByEstado);
 
 
     return router;

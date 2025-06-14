@@ -1,0 +1,1 @@
+select * from "Pedidos" where  estado::varchar(2) similar to $1;
