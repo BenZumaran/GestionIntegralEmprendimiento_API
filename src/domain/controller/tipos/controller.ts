@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 import { CreateTipo } from "../../services/tipos/create.service";
 import { UpdateTipo } from "../../services/tipos/update.service";
-import { getTiposByCategoria } from "@prisma/client/sql";
+import { getTiposByCategoria, getFiltroTextoTipo } from "@prisma/client/sql";
 
 const prisma = new PrismaClient();
 
@@ -66,5 +66,11 @@ export class TiposController {
         });
         if(!updatedTodo) return res.status(404).json({error: `Todo with id ${id} not found`});
         res.json(updatedTodo);
+    }
+
+    public getTiposByText = async (req:Request, res:Response):Promise<any> => {
+        const filtro= req.params.filtro;        
+        const tipos = await prisma.$queryRawTyped(getFiltroTextoTipo(filtro))
+        res.json(tipos);
     }
 }

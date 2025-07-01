@@ -16,6 +16,7 @@ class PedidosRoutes {
         router.post('/detalle/:pedido', pedidosController.addDetalle);
         router.put('/detalle/', pedidosController.updateDetalle);
         router.delete('/detalle/:pedido', pedidosController.deleteDetalle);
+        router.get('/filtro/estado/:filtro', pedidosController.getPedidosByEstado);
         return router;
     }
 }

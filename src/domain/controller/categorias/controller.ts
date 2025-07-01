@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { CreateCategoria } from "../../services/categorias/create.service";
 import { UpdateCategoria } from "../../services/categorias/update.service";
 import { SetTipoToCategoria } from "../../services/categorias/setTipo.service";
+import { getFiltroTextoCategoria } from "@prisma/client/sql";
 
 const prisma = new PrismaClient();
 
@@ -70,6 +71,12 @@ export class CategoriasController {
         });
         if(!updatedTodo) return res.status(404).json({error: `Todo with id ${id} not found`});
         res.json(updatedTodo);
+    }
+
+    public getCategoriasByText = async (req:Request, res:Response):Promise<any> => {
+        const filtro= req.params.filtro;        
+        const categorias = await prisma.$queryRawTyped(getFiltroTextoCategoria(filtro))
+        res.json(categorias);
     }
 
 }

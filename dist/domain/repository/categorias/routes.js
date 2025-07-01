@@ -13,6 +13,7 @@ class CategoriasRoutes {
         router.put('/:id', categoriasController.updateCategoria);
         router.post('/setTipo', categoriasController.setTipoToCategoria);
         // router.delete('/:id', categoriasController.deleteCategorias);
+        router.get('/tipos/all', categoriasController.getCategoriasTipo);
         return router;
     }
 }

@@ -16,7 +16,7 @@ export class UpdateProducto {
         this.descripcion && (returnObj.descripcion = this.descripcion);
         this.precio && (returnObj.precio = this.precio);
         this.tipo && (returnObj.tipo = this.tipo);
-        this.estado && (returnObj.estado = this.estado);
+        this.estado !== null && this.estado !== undefined && (returnObj.estado = this.estado);
         this.unidadMedida && (returnObj.unidadMedida = this.unidadMedida);
         this.rucProveedor && (returnObj.rucProveedor = this.rucProveedor);
 

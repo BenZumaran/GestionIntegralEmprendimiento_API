@@ -1,0 +1,1 @@
+select * from "Servicios" s where lower(s.nombre) like '%' || lower($1) || '%' or lower(s.descripcion) like '%' || lower($1) || '%';

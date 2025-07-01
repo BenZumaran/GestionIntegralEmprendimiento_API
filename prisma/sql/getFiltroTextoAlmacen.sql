@@ -1,0 +1,1 @@
+select * from "Almacen" a where lower(a.nombre) like '%' || lower($1) || '%' or lower(a.ubicacion) like '%' || lower($1) || '%';

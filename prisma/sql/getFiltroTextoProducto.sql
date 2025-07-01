@@ -1,0 +1,1 @@
+select * from "Productos" p where lower(p.nombre) like '%' || lower($1) || '%' or lower(p.descripcion) like '%' || lower($1) || '%';

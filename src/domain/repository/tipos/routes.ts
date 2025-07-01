@@ -12,6 +12,7 @@ export class TipoRoutes {
     router.post('/', tiposController.createTipo);
     router.put('/:id', tiposController.updateTipo);
     router.get('/categoria/:id', tiposController.getTipoByCategoria);
+    router.get('/filtro/texto/:filtro', tiposController.getTiposByText);
     
     return router;
     }

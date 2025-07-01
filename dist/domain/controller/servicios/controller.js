@@ -28,6 +28,10 @@ class ServiciosController {
             });
             return res.json(servicios);
         });
+        this.getServiciosInPedidos = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const servicios = yield prisma.pedidoServicios.findMany();
+            return res.json(servicios);
+        });
         this.getServicioById = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const id = req.params.id;
             if (!id)

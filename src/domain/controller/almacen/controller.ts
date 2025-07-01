@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 import { CreateAlmacen } from "../../services/almacen/create.service";
 import { UpdateAlmacen } from "../../services/almacen/update.service";
+import { getFiltroTextoAlmacen } from "@prisma/client/sql";
 
 const prisma = new PrismaClient();
 
@@ -90,10 +91,34 @@ export class AlmacenController {
     }
     public  getInsumosAlmacen = async (req:Request, res:Response):Promise<any> => {
         const almacen = await prisma.almacenInsumos.findMany({
-            orderBy: {
-                fechaIngreso: 'asc'
+            include: {
+                Insumo: true,
+                Almacen: true
             }
         });
         res.json(almacen);
+    }
+    public  getContenidoAlmacen = async (req:Request, res:Response):Promise<any> => {
+        const insumosAlmacen = await prisma.almacenInsumos.findMany({
+            include: {
+                Insumo: true,
+                Almacen: true
+            }
+        });
+        const productosAlmacen = await prisma.almacenProductos.findMany({
+            include: {
+                Producto: true,
+                Almacen: true
+            }
+        });
+        
+
+        res.json([...insumosAlmacen, ...productosAlmacen]); 
+    }
+
+    public getAlmacenesByText = async (req:Request, res:Response):Promise<any> => {
+        const filtro= req.params.filtro;        
+        const almacenes = await prisma.$queryRawTyped(getFiltroTextoAlmacen(filtro))
+        res.json(almacenes);
     }
 }

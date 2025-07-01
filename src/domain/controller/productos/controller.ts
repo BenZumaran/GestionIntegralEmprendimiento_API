@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 import { CreateProducto } from "../../services/productos/create.service";
 import { UpdateProducto } from "../../services/productos/update.service";
-import { getProductosInServicio } from "@prisma/client/sql";
+import { getProductosInServicio, getFiltroTextoProducto } from "@prisma/client/sql";
 import { InsertInsumoToProducto } from "../../services/productos/insertInsumoToProduct.service";
 import { UpdateInsumoToProducto } from "../../services/productos/updateInsumoToProduct.service";
 import { UpdateProductoToAlmacen } from "../../services/productos/updateProductToAlmacen.service";
@@ -82,7 +82,13 @@ export class ProductosController {
         const id = req.params.id;
         if (!id)
           return res.status(400).json({ error: "servicio id is required" });
-        const productosInServicio = await prisma.$queryRawTyped(getProductosInServicio(id));
+        const productosInServicio = await prisma.productosServicio.findMany({
+          where: { servicio:id },
+          include: {
+            Producto: true,
+            Servicio: true,            
+          }
+        });
     
         productosInServicio
           ? res.json(productosInServicio)
@@ -201,4 +207,10 @@ export class ProductosController {
         if(!updatedProducto) return res.status(404).json({error: `producto with id ${updateProductoToAlmacen?.producto} not found`});
         res.json(updatedProducto);
       }
+
+public getProductosByText = async (req:Request, res:Response):Promise<any> => {
+    const filtro= req.params.filtro;        
+    const productos = await prisma.$queryRawTyped(getFiltroTextoProducto(filtro))
+    res.json(productos);
+}
 }

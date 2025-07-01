@@ -1,0 +1,1 @@
+select * from "Usuarios" u where lower(u.correo) like '%' || lower($1) || '%' or lower(u.nombre) like '%' || lower($1) || '%' or lower(u."nombreUsuario") like '%' || lower($1) || '%' or lower(u.telefono) like '%' || lower($1) || '%' or lower(u.direccion) like '%' || lower($1) || '%' or lower(u."numeroDocumento") like '%' || lower($1) || '%';

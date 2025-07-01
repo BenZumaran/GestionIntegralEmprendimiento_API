@@ -1,0 +1,1 @@
+select * from "Tipos" t where lower(t.nombre) like '%' || lower($1) || '%';

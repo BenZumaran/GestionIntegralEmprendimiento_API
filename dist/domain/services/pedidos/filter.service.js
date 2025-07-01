@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UpdatePedido = void 0;
-class UpdatePedido {
+exports.FilterPedido = void 0;
+class FilterPedido {
     constructor(fechaCambio, usuarioIngresa, estado, nombreUsuario, correoUsuario, telefonoUsuario, documentoUsuario, direccionUsuario, fechaEntrega, Total) {
         this.fechaCambio = fechaCambio;
         this.usuarioIngresa = usuarioIngresa;
@@ -29,10 +29,8 @@ class UpdatePedido {
         return returnObj;
     }
     static create(props) {
-        const { id, fechaCambio, usuarioIngresa, estado, nombreUsuario, correoUsuario, telefonoUsuario, documentoUsuario, direccionUsuario, fechaEntrega, Total } = props;
-        if (!id)
-            return ['id es requerido'];
-        return [undefined, new UpdatePedido(new Date(), usuarioIngresa, estado, nombreUsuario, correoUsuario, telefonoUsuario, documentoUsuario, direccionUsuario, fechaEntrega, Total)];
+        const { fechaCambio, usuarioIngresa, estado, nombreUsuario, correoUsuario, telefonoUsuario, documentoUsuario, direccionUsuario, fechaEntrega, Total } = props;
+        return [undefined, new FilterPedido(fechaCambio, usuarioIngresa, estado, nombreUsuario, correoUsuario, telefonoUsuario, documentoUsuario, direccionUsuario, fechaEntrega, Total)];
     }
 }
-exports.UpdatePedido = UpdatePedido;
+exports.FilterPedido = FilterPedido;

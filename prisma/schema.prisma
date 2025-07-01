@@ -90,6 +90,7 @@ model Productos {
   Proveedor          Proveedores?        @relation(fields: [rucProveedor], references: [ruc])
   rucProveedor       String?             @db.VarChar(11)
   unidadMedida       String              @db.VarChar(25)
+  // duracion           Int                 @db.Integer
   ProductosServicios ProductosServicio[]
   PedidoProductos    PedidoProductos[]
   AlmacenProductos   AlmacenProductos[]
@@ -136,6 +137,8 @@ model Pedidos {
   fechaCambio      DateTime          @default(now()) @db.Timestamp()
   Usuario          Usuarios?         @relation(fields: [usuarioIngresa], references: [id])
   usuarioIngresa   String?           @db.VarChar()
+  // Usuario        Usuarios?         @relation(fields: [usuarioDestino], references: [id])
+  // usuarioDestino String?           @db.VarChar()
   Tipo             Tipos             @relation(fields: [estado], references: [id])
   estado           Int               @db.Integer
   nombreUsuario    String            @db.VarChar()
@@ -206,9 +209,8 @@ model AlmacenProductos {
   producto     String    @db.VarChar()
   cantidad     Int       @db.Integer
   fechaIngreso DateTime  @default(now()) @db.Timestamp()
-  lote         String    @default(cuid())
-
-  @@id([almacen, producto])
+  // fechaVencimiento DateTime  @db.Timestamp()
+  lote         String    @id @default(cuid())
 }
 
 model AlmacenInsumos {
@@ -218,7 +220,5 @@ model AlmacenInsumos {
   insumo       Int      @db.Integer
   cantidad     Int      @db.Integer
   fechaIngreso DateTime @default(now()) @db.Timestamp()
-  lote         String   @default(cuid())
-
-  @@id([almacen, insumo])
+  lote         String   @id @default(cuid())
 }

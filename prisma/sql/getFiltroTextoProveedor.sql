@@ -1,0 +1,1 @@
+select * from "Proveedores" p where lower(p."razonSocial") like '%' || lower($1) || '%' or lower(p.telefono) like '%' || lower($1) || '%' or lower(p.direccion) like '%' || lower($1) || '%' or lower(p."cuentaCorriente") like '%' || lower($1) || '%';

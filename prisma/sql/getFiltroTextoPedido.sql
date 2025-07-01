@@ -1,0 +1,1 @@
+select * from "Pedidos" p where lower(p."nombreUsuario") like '%' || lower($1) || '%' or lower(p."direccionUsuario") like '%' || lower($1) || '%' or lower(p."telefonoUsuario") like '%' || lower($1) || '%' or lower(p."documentoUsuario") like '%' || lower($1) || '%';

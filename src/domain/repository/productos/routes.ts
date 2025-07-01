@@ -12,18 +12,15 @@ export class ProductosRoutes {
     router.post('/', productosController.createProducto);
     router.put('/:id', productosController.updateProducto);
     router.delete('/:id', productosController.deleteProducto);
-    
     router.get('/servicio/:id', productosController.getProductosInServicio);
-
     router.get('/insumo/all', productosController.getProductosWithInsumos);
     router.post('/insumo', productosController.insertInsumoToProducto);
     router.put('/insumo/:servicio', productosController.updateInsumosInProducto);
     router.delete('/insumo/:servicio/:producto', productosController.deleteInsumosFromProducto);
-    
     router.post('/almacen', productosController.insertProductoToAlmacen);
     router.put('/almacen', productosController.updateProductoToAlmacen);
-    
     router.get('/pedidos/all', productosController.getProductosInPedidos);
+    router.get('/filtro/texto/:filtro', productosController.getProductosByText);
 
     return router;
     }

@@ -14,7 +14,7 @@ export class UpdateServicio {
         this.descripcion && (returnObj.descripcion = this.descripcion);
         this.precio && (returnObj.precio = this.precio);
         this.tipo && (returnObj.tipo = this.tipo);
-        this.estado && (returnObj.estado = this.estado);
+        this.estado !== undefined && this.estado !== null && (returnObj.estado = this.estado);
 
         return returnObj;
 

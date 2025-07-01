@@ -11,7 +11,8 @@ class UsuariosRoutes {
         router.get('/:id', usuariosController.getUsuarioById);
         router.post('/', usuariosController.createUsuario);
         router.put('/:id', usuariosController.updateUsuario);
-        router.post('/sesion', usuariosController.inicioSesion);
+        router.post('/sesion', usuariosController.inicioSesionByUserName);
+        router.post('/sesion/id', usuariosController.inicioSesionByUserName);
         return router;
     }
 }

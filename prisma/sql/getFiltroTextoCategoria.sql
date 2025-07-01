@@ -1,0 +1,1 @@
+select * from "Categorias" c where lower(c.nombre) like '%' || lower($1) || '%';

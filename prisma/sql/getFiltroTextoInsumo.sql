@@ -1,0 +1,1 @@
+select * from "Insumos" i where lower(i.nombre) like '%' || lower($1) || '%' or lower(i.descripcion) like '%' || lower($1) || '%';

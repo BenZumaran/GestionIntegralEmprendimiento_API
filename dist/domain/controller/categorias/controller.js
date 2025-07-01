@@ -27,6 +27,10 @@ class CategoriasController {
             });
             return res.json(categorias);
         });
+        this.getCategoriasTipo = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const categorias = yield prisma.categoriaTipos.findMany();
+            return res.json(categorias);
+        });
         this.getCategoriaById = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const id = +req.params.id;
             if (isNaN(id))

@@ -31,6 +31,10 @@ class ProductosController {
             });
             return res.json(productos);
         });
+        this.getProductosInPedidos = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const productos = yield prisma.pedidoProductos.findMany();
+            return res.json(productos);
+        });
         this.getProductoById = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const id = req.params.id;
             if (!id)

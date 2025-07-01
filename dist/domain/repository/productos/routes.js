@@ -19,6 +19,7 @@ class ProductosRoutes {
         router.delete('/insumo/:servicio/:producto', productosController.deleteInsumosFromProducto);
         router.post('/almacen', productosController.insertProductoToAlmacen);
         router.put('/almacen', productosController.updateProductoToAlmacen);
+        router.get('/pedidos/all', productosController.getProductosInPedidos);
         return router;
     }
 }

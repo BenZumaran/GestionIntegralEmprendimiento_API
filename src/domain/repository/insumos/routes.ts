@@ -11,13 +11,12 @@ export class InsumosRoutes {
     router.get('/:id', insumosController.getInsumosById);
     router.post('/', insumosController.createInsumos);
     router.put('/:id', insumosController.updateInsumos);
-    // router.delete('/:id', insumosController.deleteInsumos);
-
     router.get('/producto/:id', insumosController.getInsumosInProducto);
-
     router.post('/almacen', insumosController.insertInsumoToAlmacen);
     router.put('/almacen', insumosController.updateInsumoToAlmacen);
-
+    router.get('/filtro/texto/:filtro', insumosController.getInsumosByText);
+    
+    // router.delete('/:id', insumosController.deleteInsumos);
     return router;
     }
 

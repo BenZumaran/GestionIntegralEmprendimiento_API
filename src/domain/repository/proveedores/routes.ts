@@ -11,6 +11,7 @@ export class ProveedoresRoutes {
     router.get('/:ruc', proveedoresController.getProveedorByRuc);
     router.post('/', proveedoresController.createProveedor);
     router.put('/:ruc', proveedoresController.updateProveedor);
+    router.get('/filtro/texto/:filtro', proveedoresController.getProveedoresByText);
     
     return router;
     }

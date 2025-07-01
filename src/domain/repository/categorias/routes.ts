@@ -13,10 +13,10 @@ export class CategoriasRoutes {
     router.post('/', categoriasController.createCategoria);
     router.put('/:id', categoriasController.updateCategoria);
     router.post('/setTipo', categoriasController.setTipoToCategoria);
-    // router.delete('/:id', categoriasController.deleteCategorias);
-    
     router.get('/tipos/all', categoriasController.getCategoriasTipo);
-
+    router.get('/filtro/texto/:filtro', categoriasController.getCategoriasByText);
+    
+    // router.delete('/:id', categoriasController.deleteCategorias);
     return router;
     }
 

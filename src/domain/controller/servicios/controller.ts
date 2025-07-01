@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
+import { getFiltroTextoServicio } from "@prisma/client/sql";
 import { CreateServicio } from "../../services/servicios/create.service";
 import { UpdateServicio } from "../../services/servicios/update.service";
 import { InsertProductToService } from "../../services/servicios/insertProductToService.service";
@@ -161,7 +162,9 @@ public deleteServicio = async (req: Request, res: Response): Promise<any> => {
     res.json(servicio);
   };
 
-
-
-
+public getServiciosByText = async (req:Request, res:Response):Promise<any> => {
+    const filtro= req.params.filtro;        
+    const servicios = await prisma.$queryRawTyped(getFiltroTextoServicio(filtro))
+    res.json(servicios);
+}
 }

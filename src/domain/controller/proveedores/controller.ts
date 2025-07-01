@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
+import { getFiltroTextoProveedor } from "@prisma/client/sql";
 import { CreateProveedor } from "../../services/proveedores/create.service";
 import { UpdateProveedor } from "../../services/proveedores/update.service";
 
@@ -56,4 +57,10 @@ export class ProveedoresController {
         if(!updatedproveedor) return res.status(404).json({error: `proveedor with ruc ${ruc} not found`});
         res.json(updatedproveedor);
     }
+
+public getProveedoresByText = async (req:Request, res:Response):Promise<any> => {
+    const filtro= req.params.filtro;        
+    const proveedores = await prisma.$queryRawTyped(getFiltroTextoProveedor(filtro))
+    res.json(proveedores);
+}
 }

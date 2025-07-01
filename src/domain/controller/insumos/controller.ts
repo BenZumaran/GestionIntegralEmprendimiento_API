@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 import { CreateInsumo } from "../../services/insumos/create.service";
 import { UpdateInsumo } from "../../services/insumos/update.service";
-import { getInsumosInProducto } from "@prisma/client/sql";
+import { getInsumosInProducto, getFiltroTextoInsumo } from "@prisma/client/sql";
 import { InsertInsumoToAlmacen } from "../../services/insumos/insertInsumoToAlmacen.service";
 import { UpdateInsumoToAlmacen } from "../../services/insumos/updateInsumoToAlmacen.service";
 
@@ -87,7 +87,7 @@ export class InsumosController {
                     const insumoToAlmacen = await prisma.almacenInsumos.create({
                       data: insertInsumoToAlmacen!,
                     });
-                    res.json(insumoToAlmacen);
+                    res.json(insumoToAlmacen);  
             }
       
             public updateInsumoToAlmacen = async (
@@ -110,5 +110,11 @@ export class InsumosController {
               if(!updatedProducto) return res.status(404).json({error: `insumo with id ${updateInsumotoToAlmacen?.insumo} not found`});
               res.json(updatedProducto);
             }
+
+    public getInsumosByText = async (req:Request, res:Response):Promise<any> => {
+        const filtro= req.params.filtro;        
+        const insumos = await prisma.$queryRawTyped(getFiltroTextoInsumo(filtro))
+        res.json(insumos);
+    }
 
 }

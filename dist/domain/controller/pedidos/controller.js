@@ -13,6 +13,7 @@ exports.PedidosController = void 0;
 const client_1 = require("@prisma/client");
 const create_service_1 = require("../../services/pedidos/create.service");
 const update_service_1 = require("../../services/pedidos/update.service");
+const sql_1 = require("@prisma/client/sql");
 const prisma = new client_1.PrismaClient();
 class PedidosController {
     constructor() {
@@ -32,21 +33,19 @@ class PedidosController {
             if (!id)
                 return res.status(400).json({ error: 'Id is required' });
             const pedido = yield prisma.pedidos.findFirst({
-                where: { id }
+                where: { id },
+                include: {
+                    PedidoProductos: true,
+                    PedidoServicios: true,
+                }
             });
-            const detalleProductos = yield prisma.pedidoProductos.findMany({
-                where: { pedido: id }
-            });
-            const detalleServicios = yield prisma.pedidoServicios.findMany({
-                where: { pedido: id }
-            });
-            const resObj = {};
-            resObj.pedido = pedido;
-            detalleProductos.length > 0 && (resObj.detalleProductos = detalleProductos);
-            detalleServicios.length > 0 && (resObj.detalleServicios = detalleServicios);
-            (pedido)
-                ? res.json(resObj)
+            (pedido) ? res.json(pedido)
                 : res.status(404).json({ error: `pedido with id ${id} not found` });
+        });
+        this.getPedidosByEstado = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const filtro = req.params.filtro;
+            const pedidos = yield prisma.$queryRawTyped((0, sql_1.getPedidosByEstado)(filtro));
+            res.json(pedidos);
         });
         this.getPedidoWithDetalleById = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const id = req.params.id;

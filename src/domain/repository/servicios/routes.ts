@@ -12,13 +12,12 @@ export class ServiciosRoutes {
     router.post('/', serviciosController.createServicio);
     router.put('/:id', serviciosController.updateServicio);
     router.delete('/:id', serviciosController.deleteServicio);
-
     router.get('/producto/all', serviciosController.getServiciosWithProductos);
     router.post('/producto', serviciosController.insertProductoToServicio);
     router.put('/producto/:servicio', serviciosController.updateProductoInServicio);
     router.delete('/producto/:servicio/:producto', serviciosController.deleteProductoFromServicio);
-
-        router.get('/pedidos/all', serviciosController.getServiciosInPedidos);
+    router.get('/pedidos/all', serviciosController.getServiciosInPedidos);
+    router.get('/filtro/texto/:filtro', serviciosController.getServiciosByText);
 
     return router;
     }
